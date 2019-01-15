@@ -2,6 +2,7 @@ package goxmlrpcclient
 
 import (
 	"bytes"
+	"encoding/xml"
 	"log"
 	"net/http"
 )
@@ -10,22 +11,35 @@ type ClientConnection struct {
 	url string
 }
 
-func (clientConnection *ClientConnection) XmlRpcCall(method string, args interface{}) (reply []byte, err error) {
+func (clientConnection *ClientConnection) XmlRpcCall(request interface{}) (response []byte, err error) {
 
-	buf, errmsh = MarshalXML(method, args)
+	// request := make([]byte, 1)
+	// requestBuffer := bytes.NewBuffer(request)
+	// encoder := xml.NewEncoder(requestBuffer)
+	apiRequest, err := xml.Marshal(request)
 
-	if errmsh != nil {
-		log.Fatal(errmsh)
+	if err != nil {
+		log.Fatal(err)
 	}
 
-	response, err := http.Post(tlc.url, "text/xml", bytes.NewBuffer(buf))
+	requestReader := bytes.NewBuffer(apiRequest)
+
+	// if err := encoder.Encode(apiRequest); err != nil {
+	// 	log.Fatal(err)
+	// }
+
+	apiResponse, err := http.Post(clientConnection.url, "text/xml", requestReader)
 
 	if err != nil {
 		return
 	}
 
-	defer response.Body.Close()
+	defer apiResponse.Body.Close()
 
-	err = UnmarshalXML(reader, &reply)
-	return reply, err
+	apiResponse.Write(bytes.NewBuffer(response))
+	// if err := xml.Unmarshal(apiResponse, response); err != nil {
+	// 	log.Fatal(err)
+	// }
+	// err = UnmarshalXML(bytes.NewReader(reply), &reply)
+	return response, err
 }
