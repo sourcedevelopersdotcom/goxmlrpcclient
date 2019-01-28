@@ -11,7 +11,7 @@ type ClientConnection struct {
 	url string
 }
 
-func (clientConnection *ClientConnection) XmlRpcCall(request interface{}) (response []byte, err error) {
+func (clientConnection *ClientConnection) XmlRpcCall(httpClient ClientConnection,request interface{}) (response []byte, err error) {
 
 	// request := make([]byte, 1)
 	// requestBuffer := bytes.NewBuffer(request)
@@ -36,7 +36,7 @@ func (clientConnection *ClientConnection) XmlRpcCall(request interface{}) (respo
 
 	defer apiResponse.Body.Close()
 
-	apiResponse.Write(bytes.NewBuffer(response))
+	// apiResponse.Write(bytes.NewBuffer(response))
 	// if err := xml.Unmarshal(apiResponse, response); err != nil {
 	// 	log.Fatal(err)
 	// }

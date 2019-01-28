@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<methodCall>
+    <methodName>testMethodName</methodName>
+    <params>
+        <param>
+            <value>
+                <string>Parameter 1</string>
+            </value>
+        </param>
+        <param>
+            <value>
+                <string>Parameter 2</string>
+            </value>
+        </param>
+    </params>
+</methodCall>
